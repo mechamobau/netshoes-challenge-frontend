@@ -1,0 +1,23 @@
+{
+	"compilerOptions": {
+		"incremental": true,
+		"sourceMap": true,
+		"emitDecoratorMetadata": true,
+		"experimentalDecorators": true,
+		"strict": true,
+		"esModuleInterop": true,
+		"allowSyntheticDefaultImports": true,
+		"importHelpers": true,
+		"skipLibCheck": true,
+		"target": "es2019",
+		"module": "commonjs",
+		"outDir": "dist",
+		"declaration": true,
+		"moduleResolution": "node",
+		"preserveWatchOutput": true,
+		"resolveJsonModule": true,
+		"preserveSymlinks": true,
+		"noErrorTruncation": true
+	},
+	"exclude": ["node_modules"]
+}
