@@ -17,16 +17,27 @@ type Product = {
   isFreeShipping: boolean;
 };
 
+type ProductsList = {
+  products: Product[];
+};
+
 export default {
   index: async (_: Request, res: Response) => {
     try {
       const productsRepository = new FileRepository('products');
 
-      res.send({ data: await productsRepository.get() });
+      const { products } = await productsRepository.get<ProductsList>();
+
+      res.send({
+        data: {
+          products,
+          count: products.length
+        }
+      });
     } catch (err) {
       res.status(500).send({
         data: {
-          message: 'Error on reading locale list',
+          message: 'Error on reading product list',
           stacktrace: err
         }
       });
@@ -36,10 +47,10 @@ export default {
     try {
       const productsRepository = new FileRepository('products');
 
-      const products = await productsRepository.get<Product[]>();
+      const { products } = await productsRepository.get<ProductsList>();
 
       const foundProducts = products.find(
-        locale => `${locale.id}` === req.params.id
+        product => `${product.id}` === req.params.id
       );
 
       if (foundProducts) {
@@ -53,7 +64,7 @@ export default {
     } catch (err) {
       res.status(500).send({
         data: {
-          message: 'Error on reading locale list',
+          message: 'Error on reading product list',
           stacktrace: err
         }
       });
@@ -66,13 +77,13 @@ export default {
 
       const productsRepository = new FileRepository('products');
 
-      const locales = await productsRepository.get<Product[]>();
+      const { products } = await productsRepository.get<ProductsList>();
 
       const querySearch = normalizeTextAccents(
         escapeSpecialCharacters(req.query.q)
       );
 
-      const foundLocales = locales.filter(({ title }) =>
+      const foundLocales = products.filter(({ title }) =>
         normalizeTextAccents(title).match(new RegExp(querySearch, 'gi'))
       );
 
