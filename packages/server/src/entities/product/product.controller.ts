@@ -90,8 +90,8 @@ export default {
       if (foundLocales) {
         res.send({
           data: {
-            results: foundLocales,
-            totalCount: foundLocales.length
+            products: foundLocales,
+            count: foundLocales.length
           }
         });
         return;
