@@ -70,41 +70,5 @@ export default {
         }
       });
     }
-  },
-  search: async (req: Request, res: Response) => {
-    try {
-      if (!req.query.q)
-        throw new Error('Missing search query in request params');
-
-      const productsRepository = new FileRepository('products');
-
-      const { products } = await productsRepository.get<ProductsList>();
-
-      const querySearch = normalizeTextAccents(
-        escapeSpecialCharacters(req.query.q as string)
-      );
-
-      const foundLocales = products.filter(({ title }) =>
-        normalizeTextAccents(title).match(new RegExp(querySearch, 'gi'))
-      );
-
-      if (foundLocales) {
-        res.send({
-          data: {
-            products: foundLocales,
-            count: foundLocales.length
-          }
-        });
-        return;
-      }
-
-      res.status(404).send({ data: [] });
-    } catch (err) {
-      res.status(500).send({
-        data: {
-          message: `${err}`
-        }
-      });
-    }
   }
 };
