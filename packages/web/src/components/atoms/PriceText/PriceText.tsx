@@ -26,7 +26,7 @@ const PriceText = ({ currencyFormat, price: rawPrice, className }: Props) => {
       integer: _price[0],
       decimal: _price[1]
     };
-  }, []);
+  }, [rawPrice]);
 
   return (
     <Price className={className}>
