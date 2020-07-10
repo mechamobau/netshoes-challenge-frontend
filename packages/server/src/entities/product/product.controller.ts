@@ -81,7 +81,7 @@ export default {
       const { products } = await productsRepository.get<ProductsList>();
 
       const querySearch = normalizeTextAccents(
-        escapeSpecialCharacters(req.query.q)
+        escapeSpecialCharacters(req.query.q as string)
       );
 
       const foundLocales = products.filter(({ title }) =>
