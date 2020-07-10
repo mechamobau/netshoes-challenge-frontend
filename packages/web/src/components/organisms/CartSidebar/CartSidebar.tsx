@@ -7,12 +7,13 @@ import BagIcon from '../../atoms/BagIcon/BagIcon';
 import PriceText from '../../atoms/PriceText/PriceText';
 import ProductListItem from '../../molecules/ProductListItem/ProductListItem';
 import { baseURL } from '../../../services/api';
+import TimesIcon from '../../atoms/TimesIcon/TimesIcon';
 
 type Props = {
   open: boolean;
 };
 
-const Container = styled.aside`
+const Container = styled.aside<Pick<Props, 'open'>>`
   outline: 0;
   width: 100%;
   max-width: 500px;
@@ -25,6 +26,8 @@ const Container = styled.aside`
   padding: 15px 0;
   max-height: 100%;
   overflow-y: auto;
+  transform: ${({ open }) => (open ? `translateX(0)` : `translateX(100%)`)};
+  transition: 500ms all ease-in-out;
 `;
 
 const HeaderContainer = styled.header`
@@ -87,11 +90,27 @@ const SummaryPriceContainer = styled.div`
   }
 `;
 
+const CloseButton = styled.button`
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  cursor: pointer;
+  border: 0 none transparent;
+  background-color: transparent;
+  text-align: right;
+  margin-left: auto;
+  display: block;
+  margin-bottom: 0.875rem;
+`;
+
 const CartSidebar = ({ open }: Props) => {
-  const { cartProducts, totalPrice } = useCart();
+  const { cartProducts, totalPrice, setCartOpened } = useCart();
 
   return (
-    <Container>
+    <Container open={open}>
+      <CloseButton onClick={() => setCartOpened(false)}>
+        <TimesIcon />
+      </CloseButton>
       <HeaderContainer>
         <BagContainer>
           <BagIcon width="30px" height="30px" />

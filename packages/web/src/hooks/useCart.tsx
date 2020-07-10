@@ -1,4 +1,10 @@
-import React, { useReducer, useMemo, useCallback, useEffect } from 'react';
+import React, {
+  useReducer,
+  useMemo,
+  useCallback,
+  useEffect,
+  useState
+} from 'react';
 
 import constate from 'constate';
 import { Product } from '../services/products';
@@ -27,7 +33,6 @@ type State = ProductCart[];
 const reducer = (state: State, action: Action) => {
   switch (action.type) {
     case ActionEnum.ADD:
-      console.log('add');
       const _productIndex = state.findIndex(
         product => product.id === action.payload.id
       );
@@ -36,12 +41,9 @@ const reducer = (state: State, action: Action) => {
         state[_productIndex].count += 0.5;
 
         return [...state];
+      } else {
+        return [...state, { ...action.payload, count: 1 }];
       }
-
-      const _newProduct = { ...action.payload, count: 1 };
-
-      return [...state, _newProduct];
-
     case ActionEnum.REMOVE:
       return state.filter(product => product.id !== action.payload.id);
     default:
@@ -57,10 +59,7 @@ const initialState: ProductCart[] = [];
  */
 const [CartProvider, useCart] = constate(() => {
   const [state, dispatch] = useReducer(reducer, initialState);
-
-  useEffect(() => {
-    console.log(state);
-  }, [state]);
+  const [cartOpened, setCartOpened] = useState(true);
 
   const totalPrice = useMemo(
     () =>
@@ -72,7 +71,6 @@ const [CartProvider, useCart] = constate(() => {
   );
 
   const addProductToCart = useCallback((product: Product) => {
-    console.log('addproductfn');
     dispatch({
       type: ActionEnum.ADD,
       payload: product
@@ -92,7 +90,9 @@ const [CartProvider, useCart] = constate(() => {
     cartProducts: state,
     addProductToCart,
     totalPrice,
-    removeProductFromCart
+    removeProductFromCart,
+    cartOpened,
+    setCartOpened
   };
 });
 

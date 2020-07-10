@@ -1,6 +1,8 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useCallback } from 'react';
 import styled from 'styled-components';
 import { Product } from '../../../services/products';
+import useCart from '../../../hooks/useCart';
+import { baseURL } from '../../../services/api';
 
 const Name = styled.h2`
   &:after {
@@ -47,32 +49,32 @@ const Image = styled.img`
   margin-bottom: 1rem;
 `;
 
-type Props = Pick<Product, 'title' | 'image' | 'currencyFormat' | 'price'> & {
-  onClick: () => void;
+type Props = {
+  product: Product;
 };
 
-const ProductItem = ({
-  title,
-  image,
-  currencyFormat,
-  price: rawPrice,
-  onClick
-}: Props) => {
+const ProductItem = ({ product }: Props) => {
+  const { addProductToCart } = useCart();
+
   const price = useMemo(() => {
-    const _price = `${rawPrice.toFixed(2)}`.split('.');
+    const _price = `${product.price.toFixed(2)}`.split('.');
 
     return {
       integer: _price[0],
       decimal: _price[1]
     };
-  }, [rawPrice]);
+  }, [product]);
+
+  const handleClick = useCallback(() => {
+    addProductToCart(product);
+  }, [addProductToCart, product]);
 
   return (
-    <Container onClick={onClick}>
-      <Image src={image} />
-      <Name>{title}</Name>
+    <Container onClick={handleClick}>
+      <Image src={`${baseURL}${product.image}`} />
+      <Name>{product.title}</Name>
       <Price>
-        {currencyFormat}&nbsp;
+        {product.currencyFormat}&nbsp;
         <UpperPrice>{price.integer}</UpperPrice>,{price.decimal}
       </Price>
     </Container>
