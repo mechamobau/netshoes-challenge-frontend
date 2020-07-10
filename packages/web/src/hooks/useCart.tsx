@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React, { useReducer, useMemo } from 'react';
 
 import constate from 'constate';
 import { Product } from '../services/products';
@@ -40,6 +40,11 @@ const initialState: Product[] = [];
 const [CartProvider, useCart] = constate(() => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
+  const totalPrice = useMemo(
+    () => state.reduce((previous, current) => previous + current.price, 0),
+    [state]
+  );
+
   const addProductToCart = (product: Product) =>
     dispatch({
       type: ActionEnum.ADD,
@@ -55,6 +60,7 @@ const [CartProvider, useCart] = constate(() => {
   return {
     cartProducts: state,
     addProductToCart,
+    totalPrice,
     removeProductFromCart
   };
 });
