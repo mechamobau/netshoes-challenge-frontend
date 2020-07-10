@@ -47,9 +47,17 @@ const Image = styled.img`
   margin-bottom: 1rem;
 `;
 
-type Props = Pick<Product, 'title' | 'currencyFormat' | 'price'>;
+type Props = Pick<Product, 'title' | 'image' | 'currencyFormat' | 'price'> & {
+  onClick: () => void;
+};
 
-const ProductItem = ({ title, currencyFormat, price: rawPrice }: Props) => {
+const ProductItem = ({
+  title,
+  image,
+  currencyFormat,
+  price: rawPrice,
+  onClick
+}: Props) => {
   const price = useMemo(() => {
     const _price = `${rawPrice.toFixed(2)}`.split('.');
 
@@ -60,8 +68,8 @@ const ProductItem = ({ title, currencyFormat, price: rawPrice }: Props) => {
   }, [rawPrice]);
 
   return (
-    <Container>
-      <Image src="https://static.netshoes.com.br/produtos/camiseta-gonew-basica-fast-masculina/06/C62-2715-006/C62-2715-006_zoom2.jpg?ts=1593537805&ims=326x" />
+    <Container onClick={onClick}>
+      <Image src={image} />
       <Name>{title}</Name>
       <Price>
         {currencyFormat}&nbsp;

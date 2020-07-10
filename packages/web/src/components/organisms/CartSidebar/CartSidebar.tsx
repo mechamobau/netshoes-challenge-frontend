@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import styled from 'styled-components';
 import useCart from '../../../hooks/useCart';
@@ -6,6 +6,7 @@ import Button from '../../atoms/Button/Button';
 import BagIcon from '../../atoms/BagIcon/BagIcon';
 import PriceText from '../../atoms/PriceText/PriceText';
 import ProductListItem from '../../molecules/ProductListItem/ProductListItem';
+import { baseURL } from '../../../services/api';
 
 type Props = {
   open: boolean;
@@ -22,6 +23,8 @@ const Container = styled.aside`
   bottom: 0;
   z-index: 3;
   padding: 15px 0;
+  max-height: 100%;
+  overflow-y: auto;
 `;
 
 const HeaderContainer = styled.header`
@@ -97,10 +100,11 @@ const CartSidebar = ({ open }: Props) => {
         <HeaderTitle>Sacola</HeaderTitle>
       </HeaderContainer>
       <ProductionListContainer>
-        <ProductListItem />
-        <ProductListItem />
-        <ProductListItem />
-        <ProductListItem />
+        {cartProducts.map(({ image, ...product }) => (
+          <ProductListItem
+            product={{ image: `${baseURL}${image}`, ...product }}
+          />
+        ))}
       </ProductionListContainer>
       <ButtonContainer>
         <SummaryContainer>

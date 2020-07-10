@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 
 import styled from 'styled-components';
 import PriceText from '../../atoms/PriceText/PriceText';
 import TimesIcon from '../../atoms/TimesIcon/TimesIcon';
+
+import useCart, { ProductCart } from '../../../hooks/useCart';
 
 const Container = styled.div`
   display: flex;
@@ -21,6 +23,7 @@ const Image = styled.img<{ isStrikethrough: boolean }>`
   height: 50px;
   width: 50px;
   margin-right: 15px;
+  object-fit: cover;
 `;
 
 const InfoContainer = styled.div<{ isStrikethrough: boolean }>`
@@ -63,40 +66,52 @@ const RemoveButton = styled.button`
   margin-bottom: 0.875rem;
 `;
 
-const ProductListItem = () => {
+type Props = {
+  product: ProductCart;
+};
+
+const ProductListItem = ({ product }: Props) => {
   const [removeButtonHovered, setRemoveButtonHovered] = useState(false);
   const [productHovered, setProductHovered] = useState(false);
+  const { removeProductFromCart } = useCart();
 
-  const setTrue = (callback: (value: boolean) => void) => () => {
-    callback(true);
-  };
+  const setTrue = useCallback(
+    (callback: (value: boolean) => void) => () => {
+      callback(true);
+    },
+    []
+  );
 
-  const setFalse = (callback: (value: boolean) => void) => () => {
-    callback(false);
-  };
+  const setFalse = useCallback(
+    (callback: (value: boolean) => void) => () => {
+      callback(false);
+    },
+    []
+  );
 
   return (
     <Container
       onMouseEnter={setTrue(setProductHovered)}
       onMouseLeave={setFalse(setProductHovered)}
     >
-      <Image
-        isStrikethrough={removeButtonHovered}
-        src="https://static.netshoes.com.br/produtos/camiseta-gonew-basica-fast-masculina/06/C62-2715-006/C62-2715-006_zoom2.jpg?ts=1593537805&ims=326x"
-      />
+      <Image isStrikethrough={removeButtonHovered} src={product.image} />
       <InfoContainer isStrikethrough={removeButtonHovered}>
-        <InfoTitle>Camiseta Corinthians College 77</InfoTitle>
-        <InfoSubtitle>GGG | Preto e branco</InfoSubtitle>
-        <InfoSubtitle>Quantidade: 1</InfoSubtitle>
+        <InfoTitle>{product.title}</InfoTitle>
+        <InfoSubtitle>
+          {product.availableSizes[0]}&nbsp;
+          {product.description && `| ${product.description}`}
+        </InfoSubtitle>
+        <InfoSubtitle>Quantidade: {product.count}</InfoSubtitle>
       </InfoContainer>
       <ControlContainer>
         <RemoveButton
+          onClick={() => removeProductFromCart(product.id)}
           onMouseEnter={setTrue(setRemoveButtonHovered)}
           onMouseLeave={setFalse(setRemoveButtonHovered)}
         >
           <TimesIcon fill={productHovered ? '#fff' : '#000'} />
         </RemoveButton>
-        <Price currencyFormat="R$" price={12.21} />
+        <Price currencyFormat={product.currencyFormat} price={product.price} />
       </ControlContainer>
     </Container>
   );
