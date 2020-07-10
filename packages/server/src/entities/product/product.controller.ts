@@ -7,6 +7,7 @@ type Product = {
   id: number;
   sku: number;
   title: string;
+  image: string;
   description: string;
   availableSizes: string[];
   style: string;

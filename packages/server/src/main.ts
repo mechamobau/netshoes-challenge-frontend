@@ -4,9 +4,12 @@ import productRoutes from './entities/product/product.routes';
 
 import bodyParser from 'body-parser';
 
+import path from 'path';
+
 const app = express();
 
 app.use(bodyParser.json());
+app.use('/static', express.static(path.join(__dirname, 'assets')));
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use('/product', productRoutes);
