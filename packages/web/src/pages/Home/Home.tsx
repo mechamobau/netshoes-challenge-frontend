@@ -4,7 +4,6 @@ import ProductItem from '../../components/molecules/ProductItem/ProductItem';
 
 import styled from 'styled-components';
 import ProductService, { Product } from '../../services/products';
-import api, { baseURL } from '../../services/api';
 import useCart from '../../hooks/useCart';
 import BagIcon from '../../components/atoms/BagIcon/BagIcon';
 
@@ -55,58 +54,9 @@ const BagCounter = styled.div`
   text-align: center;
 `;
 
-const ButtonContainer = styled.div`
-  padding: 0 15px;
-`;
-
-const ProductionListContainer = styled.div``;
-
-const SummaryContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  padding: 25px 0 33px;
-`;
-
-const Title = styled.h2`
-  color: #919193;
-  font-size: 0.875rem;
-  text-transform: uppercase;
-  font-weight: 500;
-`;
-
-const SummaryPriceContainer = styled.div`
-  & > ${Title} {
-    font-size: 0.75rem;
-  }
-`;
-
-const CloseButton = styled.button`
-  position: absolute;
-  right: 20px;
-  top: 20px;
-  cursor: pointer;
-  border: 0 none transparent;
-  background-color: transparent;
-  text-align: right;
-  margin-left: auto;
-  display: block;
-  margin-bottom: 0.875rem;
-`;
-
 const Header = styled.header`
   display: flex;
   justify-content: flex-end;
-`;
-
-const CartButton = styled.button`
-  cursor: pointer;
-  border: 0 none transparent;
-  background-color: transparent;
-  text-align: right;
-  margin-left: auto;
-  display: block;
-  margin-bottom: 0.875rem;
 `;
 
 const Home = () => {

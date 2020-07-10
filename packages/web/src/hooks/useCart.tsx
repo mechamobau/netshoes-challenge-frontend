@@ -1,10 +1,4 @@
-import React, {
-  useReducer,
-  useMemo,
-  useCallback,
-  useEffect,
-  useState
-} from 'react';
+import { useReducer, useMemo, useCallback, useState } from 'react';
 
 import constate from 'constate';
 import { Product } from '../services/products';
